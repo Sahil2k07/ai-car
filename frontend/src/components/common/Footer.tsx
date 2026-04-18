@@ -1,17 +1,37 @@
-import Link from "next/link";
-import { CARS } from "@/services/carService";
+"use client";
 
-const FOOTER_LINKS = {
-  Vehicles: CARS.map((car) => ({ label: car.name, href: "/#models" })),
-  Explore: [
-    { label: "Book Test Drive", href: "/book-test-drive" },
-    { label: "Contact Us", href: "/contact" },
-    { label: "Compare Models", href: "/#comparison" },
-    { label: "Pricing", href: "/#pricing" },
-  ],
-};
+import carService from "@/services/carService";
+import { Car } from "@/types";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
+  const [cars, setCars] = useState<Car[]>([]);
+
+  const getCars = async () => {
+    try {
+      const cars = await carService.getCars();
+
+      setCars(cars);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getCars();
+  }, []);
+
+  const FOOTER_LINKS = {
+    Vehicles: cars.map((car) => ({ label: car.name, href: "/#models" })),
+    Explore: [
+      { label: "Book Test Drive", href: "/book-test-drive" },
+      { label: "Contact Us", href: "/contact" },
+      { label: "Compare Models", href: "/#comparison" },
+      { label: "Pricing", href: "/#pricing" },
+    ],
+  };
+
   return (
     <footer className="border-t border-white/5 bg-[#050508] px-6 py-16">
       <div className="mx-auto max-w-7xl">

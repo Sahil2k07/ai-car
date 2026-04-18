@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-
 import Hero from "@/components/home/Hero";
 import Models from "@/components/home/Models";
 import Features from "@/components/home/Features";
 import Comparison from "@/components/home/Comparison";
 import Pricing from "@/components/home/Pricing";
-
 import carService from "@/services/carService";
 import { useCurrency } from "@/hooks/useCurrency";
 import { Car, CurrencyCode } from "@/types";
@@ -55,7 +53,11 @@ function HomeContent() {
       <Hero />
       <Models cars={cars} highlightedId={highlightParam} formatPrice={format} />
       <Features />
-      <Comparison initialModelIds={comparisonModelIds} formatPrice={format} />
+      <Comparison
+        cars={cars}
+        initialModelIds={comparisonModelIds}
+        formatPrice={format}
+      />
       <Pricing
         cars={cars}
         currency={currency}

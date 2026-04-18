@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { BookingPageParams } from "@/types";
-import { CARS } from "@/services/carService";
+import { useEffect, useState } from "react";
+import { BookingPageParams, Car } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CheckCircle } from "lucide-react";
+import carService from "@/services/carService";
 
 const CITIES = [
   "Mumbai",
@@ -42,6 +42,22 @@ interface FormState {
 }
 
 export default function BookingForm({ prefill }: BookingFormProps) {
+  const [cars, setCars] = useState<Car[]>([]);
+
+  const getCars = async () => {
+    try {
+      const cars = await carService.getCars();
+
+      setCars(cars);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getCars();
+  }, []);
+
   const [form, setForm] = useState<FormState>({
     model: prefill.model ?? "",
     city: prefill.city ?? "",
@@ -139,7 +155,7 @@ export default function BookingForm({ prefill }: BookingFormProps) {
               <SelectValue placeholder="Select a model" />
             </SelectTrigger>
             <SelectContent>
-              {CARS.map((car) => (
+              {cars.map((car) => (
                 <SelectItem key={car.id} value={car.id}>
                   {car.name} — {car.type}
                 </SelectItem>

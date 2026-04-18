@@ -1,7 +1,6 @@
 "use client";
 
 import { Car } from "@/types";
-import { CARS } from "@/services/carService";
 import CarCard from "@/components/home/CarCard";
 
 interface ModelsProps {
@@ -15,7 +14,8 @@ export default function Models({
   highlightedId,
   formatPrice,
 }: ModelsProps) {
-  const isFiltered = cars.length < CARS.length;
+  const totalCars = cars.length;
+  const isFiltered = cars.length < totalCars;
 
   return (
     <section id="models" className="bg-aether-bg px-6 py-24">
@@ -33,7 +33,7 @@ export default function Models({
 
           {isFiltered && (
             <div className="rounded-full border border-gold/25 bg-gold/8 px-4 py-1.5 text-xs text-gold">
-              Showing {cars.length} of {CARS.length} models
+              Showing {cars.length} of {totalCars} models
             </div>
           )}
         </div>

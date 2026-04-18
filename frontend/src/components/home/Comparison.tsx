@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Car } from "@/types";
-import { CARS } from "@/services/carService";
 import {
   Select,
   SelectContent,
@@ -15,6 +14,7 @@ import { Check, Minus } from "lucide-react";
 interface ComparisonProps {
   initialModelIds?: string[];
   formatPrice: (usd: number) => string;
+  cars: Car[];
 }
 
 const SPEC_LABELS: Record<string, string> = {
@@ -25,23 +25,24 @@ const SPEC_LABELS: Record<string, string> = {
 };
 
 export default function Comparison({
+  cars,
   initialModelIds = [],
   formatPrice,
 }: ComparisonProps) {
   const getInitialCar = (index: number) => {
     const id = initialModelIds[index];
-    return CARS.find((c) => c.id === id) ?? CARS[index] ?? null;
+    return cars.find((c) => c.id === id) ?? cars[index] ?? null;
   };
 
   const [carA, setCarA] = useState<Car | null>(getInitialCar(0));
   const [carB, setCarB] = useState<Car | null>(getInitialCar(1));
 
   const handleSelectA = (id: string) => {
-    setCarA(CARS.find((c) => c.id === id) ?? null);
+    setCarA(cars.find((c) => c.id === id) ?? null);
   };
 
   const handleSelectB = (id: string) => {
-    setCarB(CARS.find((c) => c.id === id) ?? null);
+    setCarB(cars.find((c) => c.id === id) ?? null);
   };
 
   return (
@@ -68,7 +69,7 @@ export default function Comparison({
                 <SelectValue placeholder="Select model" />
               </SelectTrigger>
               <SelectContent>
-                {CARS.map((car) => (
+                {cars.map((car) => (
                   <SelectItem key={car.id} value={car.id}>
                     {car.name}
                   </SelectItem>
@@ -86,7 +87,7 @@ export default function Comparison({
                 <SelectValue placeholder="Select model" />
               </SelectTrigger>
               <SelectContent>
-                {CARS.map((car) => (
+                {cars.map((car) => (
                   <SelectItem key={car.id} value={car.id}>
                     {car.name}
                   </SelectItem>
