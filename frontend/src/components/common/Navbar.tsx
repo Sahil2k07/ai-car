@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { label: "Compare", href: "/#comparison" },
   { label: "Pricing", href: "/#pricing" },
   { label: "Book Test Drive", href: "/book-test-drive" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact", href: "/contact-us" },
 ];
 
 export default function Navbar() {
