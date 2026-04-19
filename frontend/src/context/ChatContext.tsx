@@ -75,27 +75,23 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         persistMessages(finalMessages);
 
         if (response.systemMessage.navigate) {
-          const navigate = response.systemMessage.navigate; // e.g. "/#models"
-          const filters = response.systemMessage.filters || {};
+          const { navigate, filters } = response.systemMessage;
 
-          // Filter out empty values
-          const validEntries = Object.entries(filters).filter(
-            ([_, v]) => v !== undefined && v !== null && v !== "",
-          );
+          const base =
+            typeof window !== "undefined"
+              ? window.location.origin
+              : "http://localhost";
 
-          const queryString = validEntries
-            .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
-            .join("&");
+          const url = new URL(navigate, base);
 
-          // Split to handle hash
-          const [path, hash] = navigate.split("#");
+          // 2. Clear old params and add new ones from the AI
+          Object.entries(filters).forEach(([key, value]) => {
+            if (value) url.searchParams.set(key, String(value));
+          });
 
-          // Construct: Path + Query (if exists) + Hash (if exists)
-          let finalUrl = path;
-          if (queryString) finalUrl += `?${queryString}`;
-          if (hash) finalUrl += `#${hash}`;
-
-          router.push(finalUrl);
+          // 3. Next.js push (Path + Search + Hash)
+          // url.pathname + url.search + url.hash will always be in the correct order
+          router.push(`${url.pathname}${url.search}${url.hash}`);
         }
       } catch (error) {
         console.error("AI Service Error:", error);

@@ -39,7 +39,7 @@ Routes:
 "/book-test-drive"
 
 Section routes (ONLY with "/"):
-"/#models", "/#features", "/#comparision", "/#pricing"
+"/#models", "/#features", "/#comparison", "/#pricing"
 
 ---
 

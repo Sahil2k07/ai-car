@@ -46,23 +46,15 @@ export default function BookingForm({ prefill }: BookingFormProps) {
   const [submitted, setSubmitted] = useState(false);
 
   const [form, setForm] = useState<FormState>({
-    model: prefill.model ?? "",
-    city: prefill.city ?? "",
-    date: prefill.date ?? "",
+    model: "",
+    city: "",
+    date: "",
     name: "",
     email: "",
     phone: "",
   });
 
-  useEffect(() => {
-    setForm((prev) => ({
-      ...prev,
-      model: prefill.model ?? "",
-      city: prefill.city ?? "",
-      date: prefill.date ?? "",
-    }));
-  }, [prefill.model, prefill.city, prefill.date]);
-
+  // fetch cars
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -75,6 +67,31 @@ export default function BookingForm({ prefill }: BookingFormProps) {
 
     fetchCars();
   }, []);
+
+  // helper: case-insensitive city match
+  const normalizeCity = (city?: string) => {
+    if (!city) return "";
+    const match = CITIES.find((c) => c.toLowerCase() === city.toLowerCase());
+    return match ?? "";
+  };
+
+  // prefill AFTER cars load
+  useEffect(() => {
+    if (!cars.length) return;
+
+    setForm((prev) => ({
+      ...prev,
+
+      model:
+        prefill.model && cars.some((c) => c.id === prefill.model)
+          ? prefill.model
+          : prev.model,
+
+      city: normalizeCity(prefill.city),
+
+      date: prefill.date ?? prev.date,
+    }));
+  }, [cars, prefill.model, prefill.city, prefill.date]);
 
   const handleChange = (field: keyof FormState, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -89,8 +106,6 @@ export default function BookingForm({ prefill }: BookingFormProps) {
   const today = new Date();
   today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
   const minDate = today.toISOString().split("T")[0];
-
-  const isValidModel = cars.some((c) => c.id === form.model);
 
   if (submitted) {
     return (
@@ -141,6 +156,7 @@ export default function BookingForm({ prefill }: BookingFormProps) {
               onChange={(e) => handleChange("email", e.target.value)}
             />
           </div>
+
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="phone">Phone</Label>
             <Input
@@ -164,9 +180,8 @@ export default function BookingForm({ prefill }: BookingFormProps) {
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="model">Vehicle model</Label>
           <Select
-            value={isValidModel ? form.model : ""}
+            value={form.model}
             onValueChange={(v) => handleChange("model", v)}
-            required
           >
             <SelectTrigger id="model">
               <SelectValue placeholder="Select a model" />
@@ -187,7 +202,6 @@ export default function BookingForm({ prefill }: BookingFormProps) {
             <Label htmlFor="city">Preferred city</Label>
             <Select
               value={form.city}
-              required
               onValueChange={(v) => handleChange("city", v)}
             >
               <SelectTrigger id="city">
