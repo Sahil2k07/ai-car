@@ -43,20 +43,7 @@ interface FormState {
 
 export default function BookingForm({ prefill }: BookingFormProps) {
   const [cars, setCars] = useState<Car[]>([]);
-
-  const getCars = async () => {
-    try {
-      const cars = await carService.getCars();
-
-      setCars(cars);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getCars();
-  }, []);
+  const [submitted, setSubmitted] = useState(false);
 
   const [form, setForm] = useState<FormState>({
     model: prefill.model ?? "",
@@ -66,7 +53,28 @@ export default function BookingForm({ prefill }: BookingFormProps) {
     email: "",
     phone: "",
   });
-  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    setForm((prev) => ({
+      ...prev,
+      model: prefill.model ?? "",
+      city: prefill.city ?? "",
+      date: prefill.date ?? "",
+    }));
+  }, [prefill.model, prefill.city, prefill.date]);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const data = await carService.getCars();
+        setCars(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCars();
+  }, []);
 
   const handleChange = (field: keyof FormState, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -77,6 +85,12 @@ export default function BookingForm({ prefill }: BookingFormProps) {
     console.log("[BookingForm] Submitted:", form);
     setSubmitted(true);
   };
+
+  const today = new Date();
+  today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+  const minDate = today.toISOString().split("T")[0];
+
+  const isValidModel = cars.some((c) => c.id === form.model);
 
   if (submitted) {
     return (
@@ -109,6 +123,7 @@ export default function BookingForm({ prefill }: BookingFormProps) {
           <Input
             id="name"
             placeholder="Arjun Mehta"
+            required
             value={form.name}
             onChange={(e) => handleChange("name", e.target.value)}
           />
@@ -120,6 +135,7 @@ export default function BookingForm({ prefill }: BookingFormProps) {
             <Input
               id="email"
               type="email"
+              required
               placeholder="arjun@example.com"
               value={form.email}
               onChange={(e) => handleChange("email", e.target.value)}
@@ -148,8 +164,9 @@ export default function BookingForm({ prefill }: BookingFormProps) {
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="model">Vehicle model</Label>
           <Select
-            value={form.model}
+            value={isValidModel ? form.model : ""}
             onValueChange={(v) => handleChange("model", v)}
+            required
           >
             <SelectTrigger id="model">
               <SelectValue placeholder="Select a model" />
@@ -170,6 +187,7 @@ export default function BookingForm({ prefill }: BookingFormProps) {
             <Label htmlFor="city">Preferred city</Label>
             <Select
               value={form.city}
+              required
               onValueChange={(v) => handleChange("city", v)}
             >
               <SelectTrigger id="city">
@@ -193,7 +211,8 @@ export default function BookingForm({ prefill }: BookingFormProps) {
               type="date"
               value={form.date}
               onChange={(e) => handleChange("date", e.target.value)}
-              min={new Date().toISOString().split("T")[0]}
+              min={minDate}
+              required
             />
           </div>
         </div>

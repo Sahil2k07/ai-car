@@ -28,6 +28,7 @@ export interface CurrencyOption {
 }
 
 export interface ChatMessage {
+  isError: boolean;
   id: number;
   role: "user" | "assistant";
   text: string;
@@ -35,7 +36,10 @@ export interface ChatMessage {
 
 export interface AiResponse {
   userMessage: string;
-  systemMessage: string;
+  systemMessage: {
+    navigate?: string;
+    filters: Record<string, string>;
+  };
 }
 
 export interface HomePageParams {

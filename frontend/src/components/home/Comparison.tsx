@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Car } from "@/types";
 import {
   Select,
@@ -29,13 +29,17 @@ export default function Comparison({
   initialModelIds = [],
   formatPrice,
 }: ComparisonProps) {
-  const getInitialCar = (index: number) => {
-    const id = initialModelIds[index];
-    return cars.find((c) => c.id === id) ?? cars[index] ?? null;
-  };
+  const [carA, setCarA] = useState<Car | null>(null);
+  const [carB, setCarB] = useState<Car | null>(null);
+  useEffect(() => {
+    const getInitialCar = (index: number) => {
+      const id = initialModelIds[index];
+      return cars.find((c) => c.id === id) ?? null;
+    };
 
-  const [carA, setCarA] = useState<Car | null>(getInitialCar(0));
-  const [carB, setCarB] = useState<Car | null>(getInitialCar(1));
+    setCarA(getInitialCar(0));
+    setCarB(getInitialCar(1));
+  }, [initialModelIds.join(","), cars]);
 
   const handleSelectA = (id: string) => {
     setCarA(cars.find((c) => c.id === id) ?? null);

@@ -16,7 +16,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-11 w-full items-center justify-between rounded-sm border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-white/30 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 disabled:cursor-not-allowed disabled:opacity-50 transition-colors",
+      "flex h-11 w-full items-center justify-between rounded-sm border border-white/10 bg-[#1a1a22] px-4 py-2 text-sm text-white placeholder:text-white/30 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 disabled:cursor-not-allowed disabled:opacity-50 transition-colors",
       className,
     )}
     {...props}
@@ -30,14 +30,14 @@ const SelectTrigger = React.forwardRef<
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 const SelectContent = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Content>,
+  React.ComponentRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
 >(({ className, children, position = "popper", ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 min-w-32 overflow-hidden rounded-sm border border-white/10 bg-ather-card text-white shadow-xl",
+        "relative z-50 min-w-32 overflow-hidden rounded-sm border border-white/20 bg-aether-card text-white shadow-xl",
         position === "popper" && "translate-y-1",
         className,
       )}
@@ -59,7 +59,7 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-3 text-sm outline-none focus:bg-white/5 focus:text-gold data-disabled:pointer-events-none data-disabled:opacity-50",
+      "relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-3 text-sm outline-none focus:bg-white/10 focus:text-gold data-disabled:pointer-events-none data-disabled:opacity-50",
       className,
     )}
     {...props}

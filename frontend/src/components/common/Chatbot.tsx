@@ -65,9 +65,11 @@ export default function Chatbot() {
               >
                 <div
                   className={`max-w-[80%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
-                    msg.role === "user"
-                      ? "bg-gold/20 text-gold-light"
-                      : "bg-white/5 text-white/75"
+                    !msg.isError
+                      ? msg.role === "user"
+                        ? "bg-gold/20 text-gold-light"
+                        : "bg-white/5 text-white/75"
+                      : "bg-red-500/30"
                   }`}
                 >
                   {msg.text}

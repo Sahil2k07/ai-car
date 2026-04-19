@@ -65,6 +65,7 @@ export default function ContactForm() {
             placeholder="Your name"
             value={form.name}
             onChange={handleChange}
+            required
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -76,6 +77,7 @@ export default function ContactForm() {
             placeholder="you@example.com"
             value={form.email}
             onChange={handleChange}
+            required
           />
         </div>
       </div>
@@ -86,6 +88,7 @@ export default function ContactForm() {
           id="contact-subject"
           name="subject"
           placeholder="How can we help?"
+          required
           value={form.subject}
           onChange={handleChange}
         />
@@ -96,6 +99,7 @@ export default function ContactForm() {
         <textarea
           id="contact-message"
           name="message"
+          required
           rows={5}
           placeholder="Tell us more…"
           value={form.message}

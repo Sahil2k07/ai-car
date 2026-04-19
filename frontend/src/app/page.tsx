@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+
 import Hero from "@/components/home/Hero";
 import Models from "@/components/home/Models";
 import Features from "@/components/home/Features";
 import Comparison from "@/components/home/Comparison";
 import Pricing from "@/components/home/Pricing";
+
 import carService from "@/services/carService";
 import { useCurrency } from "@/hooks/useCurrency";
 import { Car, CurrencyCode } from "@/types";
@@ -15,38 +17,61 @@ import { Car, CurrencyCode } from "@/types";
 function HomeContent() {
   const searchParams = useSearchParams();
 
-  // Read query params
   const typeParam = searchParams.get("type") ?? undefined;
   const maxPriceParam = searchParams.get("maxPrice") ?? undefined;
   const modelsParam = searchParams.get("models") ?? undefined;
   const highlightParam = searchParams.get("highlight") ?? undefined;
   const currencyParam = (searchParams.get("currency") as CurrencyCode) ?? "USD";
 
+  const [allCars, setAllCars] = useState<Car[]>([]);
   const [cars, setCars] = useState<Car[]>([]);
 
   const { currency, setCurrency, format } = useCurrency(currencyParam);
 
-  // Load and filter cars from service based on query params
   useEffect(() => {
-    carService
-      .filterCars({
-        type: typeParam,
-        maxPrice: maxPriceParam ? Number(maxPriceParam) : undefined,
-      })
-      .then(setCars);
-  }, [typeParam, maxPriceParam]);
+    carService.getCars().then((data) => {
+      setAllCars(data);
+      setCars(data);
+    });
+  }, []);
 
-  // Scroll to section if a hash is present after initial render
+  useEffect(() => {
+    let results = [...allCars];
+
+    if (typeParam) {
+      results = results.filter(
+        (c) => c.type.toLowerCase() === typeParam.toLowerCase(),
+      );
+    }
+
+    if (maxPriceParam) {
+      results = results.filter((c) => c.priceUSD <= Number(maxPriceParam));
+    }
+
+    setCars(results);
+  }, [typeParam, maxPriceParam, allCars]);
+
+  useEffect(() => {
+    if (currencyParam) {
+      setCurrency(currencyParam);
+    }
+  }, [currencyParam, setCurrency]);
+
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
       const el = document.getElementById(hash.slice(1));
-      if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 200);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 200);
+      }
     }
-  }, []);
+  }, [searchParams.toString()]);
 
-  // Parse model IDs for comparison section
-  const comparisonModelIds = modelsParam ? modelsParam.split(",") : [];
+  const comparisonModelIds = modelsParam
+    ? modelsParam.split(",").map((id) => id.trim())
+    : [];
 
   return (
     <>
@@ -54,7 +79,7 @@ function HomeContent() {
       <Models cars={cars} highlightedId={highlightParam} formatPrice={format} />
       <Features />
       <Comparison
-        cars={cars}
+        cars={allCars}
         initialModelIds={comparisonModelIds}
         formatPrice={format}
       />
