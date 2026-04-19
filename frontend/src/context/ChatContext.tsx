@@ -99,7 +99,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         const errorMsg: ChatMessage = {
           id: Date.now() + 2,
           role: "assistant",
-          text: "Something went wrong. Please try again.",
+          text: "AI quota reached limit",
           isError: true,
         };
 
