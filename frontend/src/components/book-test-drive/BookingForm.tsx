@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CheckCircle } from "lucide-react";
-import carService from "@/services/carService";
+import { getCars } from "@/actions/carActions";
 
 const CITIES = [
   "Mumbai",
@@ -58,7 +58,7 @@ export default function BookingForm({ prefill }: BookingFormProps) {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const data = await carService.getCars();
+        const data = await getCars();
         setCars(data);
       } catch (error) {
         console.error(error);

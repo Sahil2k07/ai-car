@@ -8,8 +8,8 @@ import {
   useState,
 } from "react";
 import { ChatMessage } from "@/types";
-import aiService from "@/services/aiService";
 import { useRouter } from "next/navigation";
+import { getResponse } from "@/actions/aiActions";
 
 interface ChatContextValue {
   messages: ChatMessage[];
@@ -62,7 +62,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
           .slice(-8)
           .map((msg) => `${msg.role}: ${msg.text}`);
 
-        const response = await aiService.getResponse(text, history);
+        const response = await getResponse(text, history);
 
         const assistantMsg: ChatMessage = {
           id: Date.now() + 1,

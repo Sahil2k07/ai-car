@@ -1,16 +1,16 @@
 "use client";
 
-import carService from "@/services/carService";
 import { Car } from "@/types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { getCars } from "@/actions/carActions";
 
 export default function Footer() {
   const [cars, setCars] = useState<Car[]>([]);
 
-  const getCars = async () => {
+  const getCarsList = async () => {
     try {
-      const cars = await carService.getCars();
+      const cars = await getCars();
 
       setCars(cars);
     } catch (error) {
@@ -19,7 +19,7 @@ export default function Footer() {
   };
 
   useEffect(() => {
-    getCars();
+    getCarsList();
   }, []);
 
   const FOOTER_LINKS = {

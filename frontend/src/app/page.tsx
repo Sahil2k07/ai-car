@@ -9,10 +9,9 @@ import Models from "@/components/home/Models";
 import Features from "@/components/home/Features";
 import Comparison from "@/components/home/Comparison";
 import Pricing from "@/components/home/Pricing";
-
-import carService from "@/services/carService";
 import { useCurrency } from "@/hooks/useCurrency";
 import { Car, CurrencyCode } from "@/types";
+import { getCars } from "@/actions/carActions";
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -29,7 +28,7 @@ function HomeContent() {
   const { currency, setCurrency, format } = useCurrency(currencyParam);
 
   useEffect(() => {
-    carService.getCars().then((data) => {
+    getCars().then((data) => {
       setAllCars(data);
       setCars(data);
     });
