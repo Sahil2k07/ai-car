@@ -15,7 +15,7 @@ func (cs *carService) GetCars() (any, error) {
 			"tagline":  "Grace in motion",
 			"priceUSD": 89000,
 			"color":    "#C8A96E",
-			"imageUrl": "/default-image.png",
+			"imageUrl": "/aether-one.png",
 			"specs": map[string]any{
 				"range":        "520 km",
 				"acceleration": "3.8s",
@@ -36,7 +36,7 @@ func (cs *carService) GetCars() (any, error) {
 			"tagline":  "Commanding every horizon",
 			"priceUSD": 124000,
 			"color":    "#7BA7BC",
-			"imageUrl": "/default-image.png",
+			"imageUrl": "/aether-apex.png",
 			"specs": map[string]any{
 				"range":        "610 km",
 				"acceleration": "4.2s",
@@ -57,7 +57,7 @@ func (cs *carService) GetCars() (any, error) {
 			"tagline":  "Pure electric soul",
 			"priceUSD": 156000,
 			"color":    "#9B8DBF",
-			"imageUrl": "/default-image.png",
+			"imageUrl": "/aether-volta.png",
 			"specs": map[string]any{
 				"range":        "480 km",
 				"acceleration": "2.6s",
@@ -78,7 +78,7 @@ func (cs *carService) GetCars() (any, error) {
 			"tagline":  "Wilderness, refined",
 			"priceUSD": 108000,
 			"color":    "#7BA885",
-			"imageUrl": "/default-image.png",
+			"imageUrl": "/aether-terra.png",
 			"specs": map[string]any{
 				"range":        "670 km",
 				"acceleration": "5.1s",

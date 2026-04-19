@@ -10,6 +10,7 @@ import (
 
 type appConfig struct {
 	Server serverConfig `toml:"server"`
+	Gemini geminiConfig `toml:"gemini"`
 	// include more here
 }
 
@@ -26,6 +27,7 @@ func IsProduction() bool {
 func loadProdConfig() {
 	globalConfig = appConfig{
 		Server: loadProdServerConfig(),
+		Gemini: loadProdGeminiConfig(),
 	}
 }
 

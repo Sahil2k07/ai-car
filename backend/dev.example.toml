@@ -1,3 +1,6 @@
 [server]
 server_port = ":8000"
 origins = ["http://localhost:3000", "https://medpg.shahil.co.in"]
+
+[gemini]
+api_key = "asdfasdfafasfasfasfdasff"
